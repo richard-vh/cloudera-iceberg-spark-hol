@@ -64,3 +64,21 @@
 .md-typeset .prereq-complete h2 {
   margin: 0.6em;
 }
+
+/* Styles for the username input container */
+.username-input-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    background: white; /* Light gray background */
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+/* If using Material theme dark mode, adjust colors */
+[data-md-color-scheme="slate"] .username-input-container {
+     background: #1f2020;
+     border-color: #404040;
+}
