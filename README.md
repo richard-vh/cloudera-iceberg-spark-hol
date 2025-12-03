@@ -1,6 +1,6 @@
 # Cloudera Iceberg Spark Hands On Lab
 
-![alt text](/img/new-ref-arch.png)
+![alt text](/content/assets/images/new-ref-arch.png)
 
 ## About this Hands On Lab
 
