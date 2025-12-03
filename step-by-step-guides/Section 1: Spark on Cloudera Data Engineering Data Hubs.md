@@ -1,6 +1,6 @@
 # Section 1: Spark and Iceberg on Cloudera Data Engineering Data Hubs
 
-![alt text](../img/spark-iceberg-cldr.png)
+![alt text](/content/assets/images/spark-iceberg-cldr.png)
 
 Cloudera Data Hub is a cloud service for creating and managing secure, isolated, and elastic workload clusters on AWS, Azure, and GCP. It uses Cloudera Runtime and is managed from the Cloudera Management Console.
 
@@ -44,11 +44,11 @@ The service provides pre-configured templates for common workloads but also allo
 Make sure you set a workload password for your assigned workload user i.e. user001.
 Log into the **Cloudera Data Platform** -> Click your **Profile** Name at the bottom left of the Home Page and select **Profile**.
 
-![alt text](../img/workloadpassword1.png)
+![alt text](/content/assets/images/workloadpassword1.png)
 
 In your user's setting page, click **Set Workload Password**, enter any password twice and click the **Set Workload Password** button.
 
-![alt text](../img/workloadpassword2.png)
+![alt text](/content/assets/images/workloadpassword2.png)
 
 Typically we would SSH onto the node and execute Spark commands via the command line, but for the purposes of this lab we will use JupyterLab notebooks installed on the Data Hub cluster Gateway node for a better lab experience.
 
@@ -64,7 +64,7 @@ https://workshop-de-v2-gateway0.nemea-ho.sm02r9.b0.cloudera.site:9443/
 1. In JupyterLb create a new notebook by selecting **File -> New -> Notebook**.
 2. Click the **Select** button to accept the default kernel **Python3 (ipykernel)**.
 
-![alt text](../img/jupyter1.png)
+![alt text](/content/assets/images/jupyter1.png)
 
 3. In the first cell of the new notebook paste the code below, substituting your assigned username in the username variable <userxxx> e.g. user003. This is going to create a Spark application on the Data Hub cluster for your user.
 
@@ -83,21 +83,21 @@ print("Code block completed")
 
 4. Execute the cell code by clicking the **⏵** button or you can select cmd+enter on your keyboard to do the same.
 
-![alt text](../img/jupyter2.png)
+![alt text](/content/assets/images/jupyter2.png)
 
 5. Lets check that our Spark session is running in the Data Hub Resource Manager. Navigate to the **CDP Control Plane -> Management Console -> Environments -> Select your environment**.
    
 7. Under your enviornment select your Data Engineering Data Hub.
 
-![alt text](../img/datahubselect.png)
+![alt text](/content/assets/images/datahubselect.png)
 
 7. Under your Data Hub select the **Resource Manager**
 
-![alt text](../img/resourcemanager.png)
+![alt text](/content/assets/images/resourcemanager.png)
 
 8. Go to the **Applications** tab and verify that the Spark session you created for your specific user in Jupyter is running e.g. **user001-spark-session**
 
-![alt text](../img/application.png)
+![alt text](/content/assets/images/application.png)
 
 If all is good then we're ready to get on with Iceberg on Spark in our Jupyter Notebook!!!
 
@@ -143,7 +143,7 @@ spark.sql("""
 
 print("Code block completed")
 ```
-![alt text](../img/jupyter3.png)
+![alt text](/content/assets/images/jupyter3.png)
 
 2. Add a new cell to the notebook and run each code block below to query the table.
 ```ruby
@@ -175,7 +175,7 @@ The create table statement give us the the current table DDL, including the stor
 
 ### Understanding the Metadata Files
 
-![alt text](../img/iceberg-metadatafiles.png)
+![alt text](/content/assets/images/iceberg-metadatafiles.png)
 
 #### How These Files Work Together in Iceberg:
   * The **metastore** contains a pointer to the table's current **metadata** file.
@@ -208,14 +208,14 @@ The SHOW CREATE TABLE command that you ran above shows the Iceberg table's defin
 ```ruby
 hdfs dfs -ls  <storage_location>
 ```
-![alt text](../img/jupyter4.png)
+![alt text](/content/assets/images/jupyter4.png)
 
 From the output you can see that the Iceberg table has a **/metadata** and **/data** subfolder structure.
 Now add **/metadata** onto the previous command you ran in the terminal to explore the metadata folder structure.
 ```ruby
 hdfs dfs -ls  <storage_location>/metadata
 ```
-![alt text](../img/jupyter5.png)
+![alt text](/content/assets/images/jupyter5.png)
 
 The **/metadata** directory contains snapshots, schema history, and manifest files, allowing Iceberg to manage partitioning and versioning without relying on Hive Metastore, while the **/data** directory holds the actual table data files.
 
@@ -392,7 +392,7 @@ print("Code block completed")
 
 ## Lab 4: Schema and Partition Evolution
 
-![alt text](../img/icebergevolution.png)
+![alt text](/content/assets/images/icebergevolution.png)
 
 ### Iceberg Schema Evolution
 Schema evolution in Iceberg allows you to modify the structure of your tables over time. This includes adding, renaming, and removing columns while ensuring that historical data remains accessible without requiring a full rewrite of the table.
@@ -546,7 +546,7 @@ print("Code block completed")
 
 ## Lab 5: Iceberg Time Travel & Rollbacks using Snapshots
 
-![alt text](../img/icebergtimetravel.png)
+![alt text](/content/assets/images/icebergtimetravel.png)
 
 ### Understanding Time Travel in Iceberg
 
@@ -724,7 +724,7 @@ print("Code block completed")
 
 ## Lab 6: Iceberg Tagging, Branching and Merging
 
-![alt text](../img/icebergbranchtag.png)
+![alt text](/content/assets/images/icebergbranchtag.png)
 
 ### Iceberg Tagging
 
@@ -936,7 +936,7 @@ print("Code block completed")
 
 ### “CONVERT” In-Place Migration Vanilla Parquet to Iceberg
 
-![alt text](../img/icebergmigrate.png)
+![alt text](/content/assets/images/icebergmigrate.png)
 
 **Background**
 
