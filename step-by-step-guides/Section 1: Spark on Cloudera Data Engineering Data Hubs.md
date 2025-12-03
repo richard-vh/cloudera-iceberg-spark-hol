@@ -864,70 +864,81 @@ Merging branches in Iceberg means consolidating the changes made in a branch int
 In your existing Jupyter notebook add a new cell and run the code below. Examine each statement and it's output to understand how isolated data created branches can be merged back into the main branch of Iceberg tables.
 
 ```ruby
-# Drop the table if it exists, so we can rerun the code
-spark.sql("DROP TABLE IF EXISTS default.{}_healthcare_patient_data".format(username))
+# --- 1. SETUP: Create and Populate Base Table ---
 
-# Create an Iceberg table for healthcare patient data
+# Drop the table if it exists
+spark.sql("DROP TABLE IF EXISTS default.{}_patient_medications".format(username))
+
+# Create an Iceberg table for patient medications
 spark.sql("""
-    CREATE TABLE default.{}_healthcare_patient_data (
+    CREATE TABLE default.{}_patient_medications (
         patient_id STRING,
-        patient_name STRING,
-        age INT,
-        diagnosis STRING,
-        treatment STRING,
-        doctor STRING
+        drug_name STRING,
+        dosage_mg INT
     )
     USING iceberg
 """.format(username))
 
-# Insert initial patient data into the base table (CREATES A SNAPSHOT)
+# Insert initial production data (Snapshot 1)
 spark.sql("""
-    INSERT INTO default.{}_healthcare_patient_data VALUES 
-    ('P001', 'John Doe', 45, 'Hypertension', 'Beta-blockers', 'Dr. Smith'),
-    ('P002', 'Jane Roe', 51, 'Diabetes', 'Insulin', 'Dr. Johnson')
+    INSERT INTO default.{}_patient_medications VALUES 
+    ('P001', 'Amlodipine', 10),
+    ('P002', 'Metformin', 500),
+    ('P003', 'Lipitor', 20)
 """.format(username))
 
-# CREATE A BRANCH 
-spark.sql("ALTER TABLE default.{}_healthcare_patient_data CREATE BRANCH testing_branch".format(username))
+print("--- Base Table Initial Data (3 Rows) ---")
+spark.sql("SELECT * FROM default.{}_patient_medications ORDER BY patient_id".format(username)).show()
 
-# Insert initial patient data into the base table (CREATES A SNAPSHOT)
+
+# --- 2. ISOLATION: Create the Branch ---
+
+# Create a branch named 'new_trial' based on the current snapshot
+spark.sql("ALTER TABLE default.{}_patient_medications CREATE BRANCH new_trial".format(username))
+
+
+# --- 3. DEVELOPMENT: Work on the Branch ---
+
+# Insert new, experimental data into the branch only
 spark.sql("""
-    INSERT INTO default.{}_healthcare_patient_data.branch_testing_branch VALUES 
-    ('P999', 'Richard V', 99, 'Headache', 'Time', 'Dr. Jeff')
+    INSERT INTO default.{}_patient_medications.branch_new_trial VALUES 
+    ('P004', 'Trial-X', 100),
+    ('P005', 'Trial-Y', 50)
 """.format(username))
 
-# Branch should contain the new data
-spark.sql("select * from default.{}_healthcare_patient_data.branch_testing_branch".format(username)).show()
+print("--- Branch Data (5 Rows: 3 Base + 2 New) ---")
+spark.sql("SELECT * FROM default.{}_patient_medications.branch_new_trial ORDER BY patient_id".format(username)).show()
 
-# Main table is untouched 
-spark.sql("select * from default.{}_healthcare_patient_data".format(username)).show()
+print("--- Base Table is Untouched (Still 3 Rows) ---")
+spark.sql("SELECT * FROM default.{}_patient_medications ORDER BY patient_id".format(username)).show()
 
-# Insert secondary patient data into the base table (CREATES A SNAPSHOT)
+
+# --- 4. INTEGRATION: Merge the Branch back to the Base Table ---
+
+# Merge the branch into the base table (only adding the 2 new rows)
 spark.sql("""
-    INSERT INTO default.{}_healthcare_patient_data VALUES 
-    ('P001', 'John Roe', 415, 'Hypertension', 'Beta-blockers', 'Dr. Smith'),
-    ('P002', 'Jane Poe', 511, 'Diabetes', 'Insulin', 'Dr. Johnson')
-""".format(username))
-
-# Merge the branch back into the base table
-spark.sql("""
-    MERGE INTO default.{}_healthcare_patient_data AS base
-    USING default.{}_healthcare_patient_data.branch_testing_branch AS branch
+    MERGE INTO default.{}_patient_medications AS base
+    USING default.{}_patient_medications.branch_new_trial AS branch
     ON base.patient_id = branch.patient_id
-    WHEN MATCHED THEN UPDATE SET base.patient_name = branch.patient_name,
-                                 base.age = branch.age,
-                                 base.diagnosis = branch.diagnosis,
-                                 base.treatment = branch.treatment,
-                                 base.doctor = branch.doctor
-    WHEN NOT MATCHED THEN INSERT (patient_id, patient_name, age, diagnosis, treatment, doctor)
-    VALUES (branch.patient_id, branch.patient_name, branch.age, branch.diagnosis, branch.treatment, branch.doctor)
-""".format(username,username))
+    -- Use a dummy update instead of 'DO NOTHING' (Spark SQL requirement).
+    WHEN MATCHED THEN UPDATE SET base.patient_id = base.patient_id 
+    -- If a patient_id is new (P004, P005), insert it.
+    WHEN NOT MATCHED THEN INSERT (patient_id, drug_name, dosage_mg)
+    VALUES (branch.patient_id, branch.drug_name, branch.dosage_mg)
+""".format(username, username))
 
-# BRANCH HAS NOW BEEN MERGED INTO BASE
-spark.sql("select * from default.{}_healthcare_patient_data".format(username)).show()
 
-# Drop the branch after the merge if no longer needed
-spark.sql("ALTER TABLE default.{}_healthcare_patient_data DROP BRANCH testing_branch".format(username))
+# --- 5. RESULT: Verify the Final Base Table ---
+
+# The base table now contains all 5 records
+print("--- Final Base Table After Merge (5 Rows) ---")
+spark.sql("SELECT * FROM default.{}_patient_medications ORDER BY patient_id".format(username)).show()
+
+
+# --- 6. CLEANUP: Drop the Branch ---
+
+# Remove the named reference to the branch
+spark.sql("ALTER TABLE default.{}_patient_medications DROP BRANCH new_trial".format(username))
 
 print("Code block completed")
 ```
