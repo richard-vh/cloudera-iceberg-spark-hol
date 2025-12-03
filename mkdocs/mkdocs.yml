@@ -42,7 +42,7 @@ extra:
 
 nav:
     - Iceberg on Cloudera:
-        - Module 1 "Spark and Iceberg on Cloudera Data Engineering Data Hubs: 'Section 1: Spark on Cloudera Data Engineering Data Hubs.md'
+        - Module 1: Spark and Iceberg on Cloudera Data Engineering Data Hubs: 'Section 1: Spark on Cloudera Data Engineering Data Hubs.md'
 
 
 markdown_extensions:
