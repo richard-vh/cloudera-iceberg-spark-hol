@@ -36,15 +36,13 @@ site_dir: './build'
 # not_in_nav: |
 extra_css:
   - assets/stylesheets/extra.css
-extra_javascript:
-  - assets/stylesheets/username-replacer.js
 use_directory_urls: false
 extra:
   generator: false
 
 nav:
     - Iceberg on Cloudera:
-        - Module 1 Getting Started with Iceberg: 'README.md'
+        - Module 1 "Getting Started with Iceberg using Spark on Data Hubs: 'README.md'
 
 
 markdown_extensions:
