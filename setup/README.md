@@ -9,7 +9,7 @@
    
    Under the Data Hub **Hardware and Storage** tab go to Gateway Nodes and set **Instance Count** to **1** and **Volume Size (GB)** to **300**. 
 
-![alt text](/img/gatewaynode.png)
+![alt text](https://raw.githubusercontent.com/richard-vh/cloudera-iceberg-spark-hol/refs/heads/main/content/assets/images/gatewaynode.png)
 
 5. Click **Provision Cluster** button.
 
@@ -24,7 +24,7 @@
 5. Create the group.
 6. Add members to the group. This will be the userxx1 to userxxx for your HOL participants.
 
-![alt text](/img/jupyterlabgroup.png)
+![alt text](https://raw.githubusercontent.com/richard-vh/cloudera-iceberg-spark-hol/refs/heads/main/content/assets/images/jupyterlabgroup.png)
    
 8. SSH onto the Data Hub Gateway node.
 9. Run the following commands invidually at the command prompt. We're going to install a specific version of Anancoda (Anaconda3-2024.02-1-Linux-x86_64.sh) to make sure it's using Python 3.11 to match with the Python 3.11 version used for Spark on the Data Hub Data Engineering cluster.
@@ -92,7 +92,7 @@ vi /opt/anaconda3/share/jupyter/kernels/python3/kernel.json
 ```
 The file should like like this now
 
-![alt text](/img/kernelspec.png)
+![alt text](https://raw.githubusercontent.com/richard-vh/cloudera-iceberg-spark-hol/refs/heads/main/content/assets/images/kernelspec.png)
 
 13. Run the following commands invidually at the command prompt
 ```
