@@ -23,7 +23,7 @@ The service provides pre-configured templates for common workloads but also allo
 * [Lab 4: Schema and Partition Evolution](#lab-4-schema-and-partition-evolution)<br/>
   * [Iceberg Schema Evolution](#iceberg-schema-evolution)<br/>
   * [Iceberg Partition Evolution](#iceberg-partition-evolution)<br/>
-* [Lab 5: Iceberg Time Travel & Rollbacks using Snapshots](#lab-5-iceberg-time-travel-&-rollbacks-using-snapshots)<br/>
+* [Lab 5: Iceberg Time Travel & Rollbacks using Snapshots](#lab-5-iceberg-time-travel-and-rollbacks-using-snapshots)<br/>
   * [Understanding Time Travel in Iceberg](#understanding-time-travel-in-iceberg)<br/>
   * [Rollback Tables Using Snapshots](#rollback-tables-using-snapshots)<br/>
 * [Lab 6: Iceberg Tagging, Branching and Merging](#lab-6-iceberg-tagging-branching-and-merging)<br/>
@@ -544,7 +544,7 @@ df.show(truncate=False)
 print("Code block completed")
 ```
 
-## Lab 5: Iceberg Time Travel & Rollbacks using Snapshots
+## Lab 5: Iceberg Time Travel and Rollbacks using Snapshots
 
 ![alt text](https://raw.githubusercontent.com/richard-vh/cloudera-iceberg-spark-hol/refs/heads/main/content/assets/images/icebergtimetravel.png)
 
